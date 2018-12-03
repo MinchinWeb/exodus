@@ -45,4 +45,13 @@ sharing!
   level code quality. That said, this fork seems to be the most active (last
   update 5 days ago), the most developed, and it's available on
   [PyPI](https://pypi.org/project/python-gedcom/).
-  
+- [Second Site](https://www.secondsite6.com/) -- this is a genealogy site
+  generator, but is tied to (now defunct) *The Master Genealogist*. The sample
+  site shows examples of layout options, that I imigine will be helpful
+  designing this project. *Second Site* is also a paid program ($35), so there
+  may be an option to turn this into a commercial project as well.
+- [SQLite Tools for
+  RootsMagic](https://sqlite4rootsmagic.000webhostapp.com/mainspace/home.html)
+  (temporary home?) -- a collection of SQL queries for working directly with
+  the RootsMagic database files. I'm not sure how many of these will be needed,
+  but it could be very helpful in figuring out the strucutre of the file.
