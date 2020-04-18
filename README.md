@@ -51,7 +51,7 @@ sharing!
   designing this project. *Second Site* is also a paid program ($35), so there
   may be an option to turn this into a commercial project as well.
 - [SQLite Tools for
-  RootsMagic](https://sqlite4rootsmagic.000webhostapp.com/mainspace/home.html)
-  (temporary home?) -- a collection of SQL queries for working directly with
+  RootsMagic](https://sqlitetoolsforrootsmagic.com/) -- a collection of SQL
+  queries for working directly with
   the RootsMagic database files. I'm not sure how many of these will be needed,
   but it could be very helpful in figuring out the strucutre of the file.
