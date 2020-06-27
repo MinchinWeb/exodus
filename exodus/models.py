@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Addresslinktable(models.Model):
-    linkid = models.AutoField(db_column='LinkID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    linkid = models.AutoField(db_column='LinkID', primary_key=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     addressid = models.IntegerField(db_column='AddressID', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
@@ -22,7 +22,7 @@ class Addresslinktable(models.Model):
 
 
 class Addresstable(models.Model):
-    addressid = models.AutoField(db_column='AddressID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    addressid = models.AutoField(db_column='AddressID', primary_key=True)  # Field name made lowercase.
     addresstype = models.IntegerField(db_column='AddressType', blank=True, null=True)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     street1 = models.TextField(db_column='Street1', blank=True, null=True)  # Field name made lowercase.
@@ -46,7 +46,7 @@ class Addresstable(models.Model):
 
 
 class Childtable(models.Model):
-    recid = models.AutoField(db_column='RecID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    recid = models.AutoField(db_column='RecID', primary_key=True)  # Field name made lowercase.
     childid = models.IntegerField(db_column='ChildID', blank=True, null=True)  # Field name made lowercase.
     familyid = models.IntegerField(db_column='FamilyID', blank=True, null=True)  # Field name made lowercase.
     relfather = models.IntegerField(db_column='RelFather', blank=True, null=True)  # Field name made lowercase.
@@ -63,7 +63,7 @@ class Childtable(models.Model):
 
 
 class Citationtable(models.Model):
-    citationid = models.AutoField(db_column='CitationID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    citationid = models.AutoField(db_column='CitationID', primary_key=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     sourceid = models.IntegerField(db_column='SourceID', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
@@ -81,7 +81,7 @@ class Citationtable(models.Model):
 
 
 class Configtable(models.Model):
-    recid = models.AutoField(db_column='RecID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    recid = models.AutoField(db_column='RecID', primary_key=True)  # Field name made lowercase.
     rectype = models.IntegerField(db_column='RecType', blank=True, null=True)  # Field name made lowercase.
     title = models.TextField(db_column='Title', blank=True, null=True)  # Field name made lowercase.
     datarec = models.BinaryField(db_column='DataRec', blank=True, null=True)  # Field name made lowercase.
@@ -92,7 +92,7 @@ class Configtable(models.Model):
 
 
 class Eventtable(models.Model):
-    eventid = models.AutoField(db_column='EventID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    eventid = models.AutoField(db_column='EventID', primary_key=True)  # Field name made lowercase.
     eventtype = models.IntegerField(db_column='EventType', blank=True, null=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
@@ -116,7 +116,7 @@ class Eventtable(models.Model):
 
 
 class Exclusiontable(models.Model):
-    recid = models.AutoField(db_column='RecID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    recid = models.AutoField(db_column='RecID', primary_key=True)  # Field name made lowercase.
     exclusiontype = models.IntegerField(db_column='ExclusionType', blank=True, null=True)  # Field name made lowercase.
     id1 = models.IntegerField(db_column='ID1', blank=True, null=True)  # Field name made lowercase.
     id2 = models.IntegerField(db_column='ID2', blank=True, null=True)  # Field name made lowercase.
@@ -128,7 +128,7 @@ class Exclusiontable(models.Model):
 
 
 class Facttypetable(models.Model):
-    facttypeid = models.AutoField(db_column='FactTypeID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    facttypeid = models.AutoField(db_column='FactTypeID', primary_key=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     abbrev = models.TextField(db_column='Abbrev', blank=True, null=True)  # Field name made lowercase.
@@ -145,7 +145,7 @@ class Facttypetable(models.Model):
 
 
 class Familytable(models.Model):
-    familyid = models.AutoField(db_column='FamilyID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    familyid = models.AutoField(db_column='FamilyID', primary_key=True)  # Field name made lowercase.
     fatherid = models.IntegerField(db_column='FatherID', blank=True, null=True)  # Field name made lowercase.
     motherid = models.IntegerField(db_column='MotherID', blank=True, null=True)  # Field name made lowercase.
     childid = models.IntegerField(db_column='ChildID', blank=True, null=True)  # Field name made lowercase.
@@ -164,7 +164,7 @@ class Familytable(models.Model):
 
 
 class Grouptable(models.Model):
-    recid = models.AutoField(db_column='RecID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    recid = models.AutoField(db_column='RecID', primary_key=True)  # Field name made lowercase.
     groupid = models.IntegerField(db_column='GroupID', blank=True, null=True)  # Field name made lowercase.
     startid = models.IntegerField(db_column='StartID', blank=True, null=True)  # Field name made lowercase.
     endid = models.IntegerField(db_column='EndID', blank=True, null=True)  # Field name made lowercase.
@@ -175,7 +175,7 @@ class Grouptable(models.Model):
 
 
 class Labeltable(models.Model):
-    labelid = models.AutoField(db_column='LabelID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    labelid = models.AutoField(db_column='LabelID', primary_key=True)  # Field name made lowercase.
     labeltype = models.IntegerField(db_column='LabelType', blank=True, null=True)  # Field name made lowercase.
     labelvalue = models.IntegerField(db_column='LabelValue', blank=True, null=True)  # Field name made lowercase.
     labelname = models.TextField(db_column='LabelName', blank=True, null=True)  # Field name made lowercase.
@@ -187,7 +187,7 @@ class Labeltable(models.Model):
 
 
 class Linkancestrytable(models.Model):
-    linkid = models.AutoField(db_column='LinkID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    linkid = models.AutoField(db_column='LinkID', primary_key=True)  # Field name made lowercase.
     extsystem = models.IntegerField(db_column='extSystem', blank=True, null=True)  # Field name made lowercase.
     linktype = models.IntegerField(db_column='LinkType', blank=True, null=True)  # Field name made lowercase.
     rmid = models.IntegerField(db_column='rmID', blank=True, null=True)  # Field name made lowercase.
@@ -204,7 +204,7 @@ class Linkancestrytable(models.Model):
 
 
 class Linktable(models.Model):
-    linkid = models.AutoField(db_column='LinkID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    linkid = models.AutoField(db_column='LinkID', primary_key=True)  # Field name made lowercase.
     extsystem = models.IntegerField(db_column='extSystem', blank=True, null=True)  # Field name made lowercase.
     linktype = models.IntegerField(db_column='LinkType', blank=True, null=True)  # Field name made lowercase.
     rmid = models.IntegerField(db_column='rmID', blank=True, null=True)  # Field name made lowercase.
@@ -221,7 +221,7 @@ class Linktable(models.Model):
 
 
 class Medialinktable(models.Model):
-    linkid = models.AutoField(db_column='LinkID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    linkid = models.AutoField(db_column='LinkID', primary_key=True)  # Field name made lowercase.
     mediaid = models.IntegerField(db_column='MediaID', blank=True, null=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
@@ -248,7 +248,7 @@ class Medialinktable(models.Model):
 
 
 class Multimediatable(models.Model):
-    mediaid = models.AutoField(db_column='MediaID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    mediaid = models.AutoField(db_column='MediaID', primary_key=True)  # Field name made lowercase.
     mediatype = models.IntegerField(db_column='MediaType', blank=True, null=True)  # Field name made lowercase.
     mediapath = models.TextField(db_column='MediaPath', blank=True, null=True)  # Field name made lowercase.
     mediafile = models.TextField(db_column='MediaFile', blank=True, null=True)  # Field name made lowercase.
@@ -266,7 +266,7 @@ class Multimediatable(models.Model):
 
 
 class Nametable(models.Model):
-    nameid = models.AutoField(db_column='NameID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    nameid = models.AutoField(db_column='NameID', primary_key=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
     surname = models.TextField(db_column='Surname', blank=True, null=True)  # Field name made lowercase.
     given = models.TextField(db_column='Given', blank=True, null=True)  # Field name made lowercase.
@@ -291,7 +291,7 @@ class Nametable(models.Model):
 
 
 class Persontable(models.Model):
-    personid = models.AutoField(db_column='PersonID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    personid = models.AutoField(db_column='PersonID', primary_key=True)  # Field name made lowercase.
     uniqueid = models.TextField(db_column='UniqueID', blank=True, null=True)  # Field name made lowercase.
     sex = models.IntegerField(db_column='Sex', blank=True, null=True)  # Field name made lowercase.
     editdate = models.TextField(db_column='EditDate', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
@@ -313,7 +313,7 @@ class Persontable(models.Model):
 
 
 class Placetable(models.Model):
-    placeid = models.AutoField(db_column='PlaceID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    placeid = models.AutoField(db_column='PlaceID', primary_key=True)  # Field name made lowercase.
     placetype = models.IntegerField(db_column='PlaceType', blank=True, null=True)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     abbrev = models.TextField(db_column='Abbrev', blank=True, null=True)  # Field name made lowercase.
@@ -330,7 +330,7 @@ class Placetable(models.Model):
 
 
 class Researchitemtable(models.Model):
-    itemid = models.AutoField(db_column='ItemID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    itemid = models.AutoField(db_column='ItemID', primary_key=True)  # Field name made lowercase.
     logid = models.IntegerField(db_column='LogID', blank=True, null=True)  # Field name made lowercase.
     date = models.TextField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
     sortdate = models.IntegerField(db_column='SortDate', blank=True, null=True)  # Field name made lowercase.
@@ -346,7 +346,7 @@ class Researchitemtable(models.Model):
 
 
 class Researchtable(models.Model):
-    taskid = models.AutoField(db_column='TaskID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    taskid = models.AutoField(db_column='TaskID', primary_key=True)  # Field name made lowercase.
     tasktype = models.IntegerField(db_column='TaskType', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
@@ -369,7 +369,7 @@ class Researchtable(models.Model):
 
 
 class Roletable(models.Model):
-    roleid = models.AutoField(db_column='RoleID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    roleid = models.AutoField(db_column='RoleID', primary_key=True)  # Field name made lowercase.
     rolename = models.TextField(db_column='RoleName', blank=True, null=True)  # Field name made lowercase.
     eventtype = models.IntegerField(db_column='EventType', blank=True, null=True)  # Field name made lowercase.
     roletype = models.IntegerField(db_column='RoleType', blank=True, null=True)  # Field name made lowercase.
@@ -381,7 +381,7 @@ class Roletable(models.Model):
 
 
 class Sourcetable(models.Model):
-    sourceid = models.AutoField(db_column='SourceID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    sourceid = models.AutoField(db_column='SourceID', primary_key=True)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     refnumber = models.TextField(db_column='RefNumber', blank=True, null=True)  # Field name made lowercase.
     actualtext = models.TextField(db_column='ActualText', blank=True, null=True)  # Field name made lowercase.
@@ -396,7 +396,7 @@ class Sourcetable(models.Model):
 
 
 class Sourcetemplatetable(models.Model):
-    templateid = models.AutoField(db_column='TemplateID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    templateid = models.AutoField(db_column='TemplateID', primary_key=True)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(db_column='Description', blank=True, null=True)  # Field name made lowercase.
     favorite = models.IntegerField(db_column='Favorite', blank=True, null=True)  # Field name made lowercase.
@@ -412,7 +412,7 @@ class Sourcetemplatetable(models.Model):
 
 
 class Urltable(models.Model):
-    linkid = models.AutoField(db_column='LinkID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    linkid = models.AutoField(db_column='LinkID', primary_key=True)  # Field name made lowercase.
     ownertype = models.IntegerField(db_column='OwnerType', blank=True, null=True)  # Field name made lowercase.
     ownerid = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # Field name made lowercase.
     linktype = models.IntegerField(db_column='LinkType', blank=True, null=True)  # Field name made lowercase.
@@ -426,7 +426,7 @@ class Urltable(models.Model):
 
 
 class Witnesstable(models.Model):
-    witnessid = models.AutoField(db_column='WitnessID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    witnessid = models.AutoField(db_column='WitnessID', primary_key=True)  # Field name made lowercase.
     eventid = models.IntegerField(db_column='EventID', blank=True, null=True)  # Field name made lowercase.
     personid = models.IntegerField(db_column='PersonID', blank=True, null=True)  # Field name made lowercase.
     witnessorder = models.IntegerField(db_column='WitnessOrder', blank=True, null=True)  # Field name made lowercase.
