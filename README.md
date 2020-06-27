@@ -1,12 +1,12 @@
 # exodus
 
-Build a Genealogy site from your Rootsmagic Database.
+Build a Genealogy site from your RootsMagic Database.
 
 ## Name
 
 Names are one of the hardest things to come up with, and in the age of Google,
 most of the simple and short ones have already been taken (as this one has
-too). Anyway, the idea is this program serves to take your genelogy data,
+too). Anyway, the idea is this program serves to take your genealogy data,
 currently captive on your local machine, and take it to the promised land of
 sharing!
 
@@ -32,7 +32,7 @@ sharing!
   format](https://github.com/OpenGenOrg/rosetta/tree/master/analysis), which
   will likely be helpful.
 - "[TimeNets](http://vis.stanford.edu/papers/timenets)" -- this is a research
-  paper that discribles one way to show the temporal coincidence of people in
+  paper that describes one way to show the temporal coincidence of people in
   your genealogy file. I think this would be very helpful, either in just
   showing parents and their children, or maybe even a pedigree.
 - [gedcom2html](https://github.com/picnicprojects/gedcom2html) -- takes a
@@ -41,17 +41,17 @@ sharing!
   I'm not sure I understand the navigator though.
 - [python-gedcom](https://github.com/nickreynke/python-gedcom) -- most of the
   Python Gedcom pharsers I've found trace back to a BYU class assignment from
-  appoximately 2005. However, none of them seem to have reached production
+  approximately 2005. However, none of them seem to have reached production
   level code quality. That said, this fork seems to be the most active (last
   update 5 days ago), the most developed, and it's available on
   [PyPI](https://pypi.org/project/python-gedcom/).
 - [Second Site](https://www.secondsite6.com/) -- this is a genealogy site
   generator, but is tied to (now defunct) *The Master Genealogist*. The sample
-  site shows examples of layout options, that I imigine will be helpful
+  site shows examples of layout options, that I imagine will be helpful
   designing this project. *Second Site* is also a paid program ($35), so there
   may be an option to turn this into a commercial project as well.
 - [SQLite Tools for
   RootsMagic](https://sqlitetoolsforrootsmagic.com/) -- a collection of SQL
   queries for working directly with
   the RootsMagic database files. I'm not sure how many of these will be needed,
-  but it could be very helpful in figuring out the strucutre of the file.
+  but it could be very helpful in figuring out the structure of the file.
