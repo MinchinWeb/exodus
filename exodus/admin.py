@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from .models import (Addresslinktable, Addresstable, Childtable, Citationtable,
-                     Configtable, Eventtable, Exclusiontable, Facttypetable,
-                     Familytable, Grouptable, Labeltable, Linkancestrytable,
-                     Linktable, Medialinktable, Multimediatable, Nametable,
-                     Persontable, Placetable, Researchitemtable, Researchtable,
-                     Roletable, Sourcetable, Sourcetemplatetable, Urltable,
-                     Witnesstable)
+from .models import (AddressLink, Address, Child, Citation,
+                     Configuration, Event, Exclusion, FactType,
+                     Family, Group, Label, LinkAncestry,
+                     Link, MediaLink, Multimedia, Name,
+                     Person, Place, ResearchItem, Research,
+                     Role, Source, SourceTemplate, Url,
+                     Witness)
 
 class MultiDBModelAdmin(admin.ModelAdmin):
     # file:///home/william/Code/exodus-testsite/django-docs/topics/db/multi-db.html
@@ -41,105 +41,105 @@ class RootsMagicModelAdmin(MultiDBModelAdmin):
     using = 'rm'
 
 
-class AddresslinktableAdmin(RootsMagicModelAdmin):
+class AddressLinkAdmin(RootsMagicModelAdmin):
     pass
 
-class AddresstableAdmin(RootsMagicModelAdmin):
+class AddressAdmin(RootsMagicModelAdmin):
     pass
 
-class ChildtableAdmin(RootsMagicModelAdmin):
+class ChildAdmin(RootsMagicModelAdmin):
     pass
 
-class CitationtableAdmin(RootsMagicModelAdmin):
+class CitationAdmin(RootsMagicModelAdmin):
     pass
 
-class ConfigtableAdmin(RootsMagicModelAdmin):
+class ConfigurationAdmin(RootsMagicModelAdmin):
     pass
 
-class EventtableAdmin(RootsMagicModelAdmin):
+class EventAdmin(RootsMagicModelAdmin):
     pass
 
-class ExclusiontableAdmin(RootsMagicModelAdmin):
+class ExclusionAdmin(RootsMagicModelAdmin):
     pass
 
-class FacttypetableAdmin(RootsMagicModelAdmin):
+class FactTypeAdmin(RootsMagicModelAdmin):
     pass
 
-class FamilytableAdmin(RootsMagicModelAdmin):
+class FamilyAdmin(RootsMagicModelAdmin):
     pass
 
-class GrouptableAdmin(RootsMagicModelAdmin):
+class GroupAdmin(RootsMagicModelAdmin):
     pass
 
-class LabeltableAdmin(RootsMagicModelAdmin):
+class LabelAdmin(RootsMagicModelAdmin):
     pass
 
-class LinkancestrytableAdmin(RootsMagicModelAdmin):
+class LinkAncestryAdmin(RootsMagicModelAdmin):
     pass
 
-class LinktableAdmin(RootsMagicModelAdmin):
+class LinkAdmin(RootsMagicModelAdmin):
     pass
 
-class MedialinktableAdmin(RootsMagicModelAdmin):
+class MediaLinkAdmin(RootsMagicModelAdmin):
     pass
 
-class MultimediatableAdmin(RootsMagicModelAdmin):
+class MultimediaAdmin(RootsMagicModelAdmin):
     pass
 
-class NametableAdmin(RootsMagicModelAdmin):
+class NameAdmin(RootsMagicModelAdmin):
     pass
 
-class PersontableAdmin(RootsMagicModelAdmin):
+class PersonAdmin(RootsMagicModelAdmin):
     pass
 
-class PlacetableAdmin(RootsMagicModelAdmin):
+class PlaceAdmin(RootsMagicModelAdmin):
     pass
 
-class ResearchitemtableAdmin(RootsMagicModelAdmin):
+class ResearchItemAdmin(RootsMagicModelAdmin):
     pass
 
-class ResearchtableAdmin(RootsMagicModelAdmin):
+class ResearchAdmin(RootsMagicModelAdmin):
     pass
 
-class RoletableAdmin(RootsMagicModelAdmin):
+class RoleAdmin(RootsMagicModelAdmin):
     pass
 
-class SourcetableAdmin(RootsMagicModelAdmin):
+class SourceAdmin(RootsMagicModelAdmin):
     pass
 
-class SourcetemplatetableAdmin(RootsMagicModelAdmin):
+class SourceTemplateAdmin(RootsMagicModelAdmin):
     pass
 
-class UrltableAdmin(RootsMagicModelAdmin):
+class UrlAdmin(RootsMagicModelAdmin):
     pass
 
-class WitnesstableAdmin(RootsMagicModelAdmin):
+class WitnessAdmin(RootsMagicModelAdmin):
     pass
 
 
 
-admin.site.register(Addresslinktable, AddresslinktableAdmin)
-admin.site.register(Addresstable, AddresstableAdmin)
-admin.site.register(Childtable, ChildtableAdmin)
-admin.site.register(Citationtable, CitationtableAdmin)
-admin.site.register(Configtable, ConfigtableAdmin)
-admin.site.register(Eventtable, EventtableAdmin)
-admin.site.register(Exclusiontable, ExclusiontableAdmin)
-admin.site.register(Facttypetable, FacttypetableAdmin)
-admin.site.register(Familytable, FamilytableAdmin)
-admin.site.register(Grouptable, GrouptableAdmin)
-admin.site.register(Labeltable, LabeltableAdmin)
-admin.site.register(Linkancestrytable, LinkancestrytableAdmin)
-admin.site.register(Linktable, LinktableAdmin)
-admin.site.register(Medialinktable, MedialinktableAdmin)
-admin.site.register(Multimediatable, MultimediatableAdmin)
-admin.site.register(Nametable, NametableAdmin)
-admin.site.register(Persontable, PersontableAdmin)
-admin.site.register(Placetable, PlacetableAdmin)
-admin.site.register(Researchitemtable, ResearchitemtableAdmin)
-admin.site.register(Researchtable, ResearchtableAdmin)
-admin.site.register(Roletable, RoletableAdmin)
-admin.site.register(Sourcetable, SourcetableAdmin)
-admin.site.register(Sourcetemplatetable, SourcetemplatetableAdmin)
-admin.site.register(Urltable, UrltableAdmin)
-admin.site.register(Witnesstable, WitnesstableAdmin)
+admin.site.register(AddressLink, AddressLinkAdmin)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Child, ChildAdmin)
+admin.site.register(Citation, CitationAdmin)
+admin.site.register(Configuration, ConfigurationAdmin)
+admin.site.register(Event, EventAdmin)
+admin.site.register(Exclusion, ExclusionAdmin)
+admin.site.register(FactType, FactTypeAdmin)
+admin.site.register(Family, FamilyAdmin)
+admin.site.register(Group, GroupAdmin)
+admin.site.register(Label, LabelAdmin)
+admin.site.register(LinkAncestry, LinkAncestryAdmin)
+admin.site.register(Link, LinkAdmin)
+admin.site.register(MediaLink, MediaLinkAdmin)
+admin.site.register(Multimedia, MultimediaAdmin)
+admin.site.register(Name, NameAdmin)
+admin.site.register(Person, PersonAdmin)
+admin.site.register(Place, PlaceAdmin)
+admin.site.register(ResearchItem, ResearchItemAdmin)
+admin.site.register(Research, ResearchAdmin)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(Source, SourceAdmin)
+admin.site.register(SourceTemplate, SourceTemplateAdmin)
+admin.site.register(Url, UrlAdmin)
+admin.site.register(Witness, WitnessAdmin)
