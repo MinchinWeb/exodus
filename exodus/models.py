@@ -23,6 +23,7 @@ class AddressLink(models.Model):
 
 
 class Address(models.Model):
+    # no such collation sequence: RMNOCASE
     id = models.AutoField(db_column='AddressID', primary_key=True)
     address_type = models.IntegerField(db_column='AddressType', blank=True, null=True)
     name = models.TextField(db_column='Name', blank=True, null=True)
@@ -54,7 +55,7 @@ class Child(models.Model):
     father_relationship = models.IntegerField(db_column='RelFather', blank=True, null=True)
     mother_relationship = models.IntegerField(db_column='RelMother', blank=True, null=True)
     child_order = models.IntegerField(db_column='ChildOrder', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     father_proof = models.IntegerField(db_column='ProofFather', blank=True, null=True)
     mother_proof = models.IntegerField(db_column='ProofMother', blank=True, null=True)
     note = models.BinaryField(db_column='Note', blank=True, null=True)
@@ -70,8 +71,10 @@ class Citation(models.Model):
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
     source_id = models.IntegerField(db_column='SourceID', blank=True, null=True)
     owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
-    quality = models.TextField(db_column='Quality', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    quality = models.CharField(db_column='Quality', max_length=3, blank=True, null=True)
+    # three characters, using "~~~" for "undefined"
+    # "PDO" is valid (for "Primary", ? "Original")
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     comments = models.BinaryField(db_column='Comments', blank=True, null=True)
     actual_text = models.BinaryField(db_column='ActualText', blank=True, null=True)
     reference_number = models.TextField(db_column='RefNumber', blank=True, null=True)
@@ -103,9 +106,16 @@ class Event(models.Model):
     place_id = models.IntegerField(db_column='PlaceID', blank=True, null=True)
     site_id = models.IntegerField(db_column='SiteID', blank=True, null=True)
     date = models.TextField(db_column='Date', blank=True, null=True)
+    # "." for unset
+    # "D[R.]+YYYYMMDD.[CA.]00000000.."
+    #     "R" is for a range, where the second set of digits is the end of the range,
+    #         and set to "00000000" otherwise
+    #     where the "+" likely means AD ("-" for BC dates?)
+    #     MM and DD can be set to "00" for incomplete dates, with "A" for years
+    #         and "C" for months (but "A" and "C" is not used for date ranges)
     sort_date = models.IntegerField(db_column='SortDate', blank=True, null=True)
-    is_primary = models.IntegerField(db_column='IsPrimary', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     proof = models.IntegerField(db_column='Proof', blank=True, null=True)
     status = models.IntegerField(db_column='Status', blank=True, null=True)
     edit_date = models.TextField(db_column='EditDate', blank=True, null=True)  # This field type is a guess.
@@ -133,13 +143,17 @@ class Exclusion(models.Model):
 class FactType(models.Model):
     id = models.AutoField(db_column='FactTypeID', primary_key=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
+    # 0 -- individual
+    # 1 -- couple or family
     name = models.TextField(db_column='Name', blank=True, null=True)
+    # english name for the event; useful for tables
     abbreviation = models.TextField(db_column='Abbrev', blank=True, null=True)
-    gedcom_tag = models.TextField(db_column='GedcomTag', blank=True, null=True)
-    use_value = models.IntegerField(db_column='UseValue', blank=True, null=True)
-    use_date = models.IntegerField(db_column='UseDate', blank=True, null=True)
-    use_place = models.IntegerField(db_column='UsePlace', blank=True, null=True)
+    gedcom_tag = models.CharField(db_column='GedcomTag', max_length=4, blank=True, null=True)
+    use_value = models.BooleanField(db_column='UseValue', blank=True, null=True)
+    use_date = models.BooleanField(db_column='UseDate', blank=True, null=True)
+    use_place = models.BooleanField(db_column='UsePlace', blank=True, null=True)
     sentence = models.BinaryField(db_column='Sentence', blank=True, null=True)
+    # useful to create a "story" for the facts
     flags = models.IntegerField(db_column='Flags', blank=True, null=True)
 
     class Meta:
@@ -155,7 +169,7 @@ class Family(models.Model):
     child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
     husband_order = models.IntegerField(db_column='HusbOrder', blank=True, null=True)
     wife_order = models.IntegerField(db_column='WifeOrder', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     proof = models.IntegerField(db_column='Proof', blank=True, null=True)
     spouse_label = models.IntegerField(db_column='SpouseLabel', blank=True, null=True)
     father_label = models.IntegerField(db_column='FatherLabel', blank=True, null=True)
@@ -213,9 +227,12 @@ class LinkAncestry(models.Model):
 class Link(models.Model):
     id = models.AutoField(db_column='LinkID', primary_key=True)
     ext_system = models.IntegerField(db_column='extSystem', blank=True, null=True)
+    # 1 -- FamilySearch
     link_type = models.IntegerField(db_column='LinkType', blank=True, null=True)
     rootsmagic_id = models.IntegerField(db_column='rmID', blank=True, null=True)
     ext_id = models.TextField(db_column='extID', blank=True, null=True)
+    # ID in link system
+    #    e.g. "L82W-Z87" for FamilySearch
     modified = models.IntegerField(db_column='Modified', blank=True, null=True)
     ext_version = models.TextField(db_column='extVersion', blank=True, null=True)
     ext_date = models.TextField(db_column='extDate', blank=True, null=True)  # This field type is a guess.
@@ -232,11 +249,11 @@ class MediaLink(models.Model):
     media_id = models.IntegerField(db_column='MediaID', blank=True, null=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
     owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
-    is_primary = models.IntegerField(db_column='IsPrimary', blank=True, null=True)
-    include_1 = models.IntegerField(db_column='Include1', blank=True, null=True)
-    include_2 = models.IntegerField(db_column='Include2', blank=True, null=True)
-    include_3 = models.IntegerField(db_column='Include3', blank=True, null=True)
-    include_4 = models.IntegerField(db_column='Include4', blank=True, null=True)
+    is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
+    include_1 = models.BooleanField(db_column='Include1', blank=True, null=True)
+    include_2 = models.BooleanField(db_column='Include2', blank=True, null=True)
+    include_3 = models.BooleanField(db_column='Include3', blank=True, null=True)
+    include_4 = models.BooleanField(db_column='Include4', blank=True, null=True)
     sort_order = models.IntegerField(db_column='SortOrder', blank=True, null=True)
     rectangle_left = models.IntegerField(db_column='RectLeft', blank=True, null=True)
     rectangle_top = models.IntegerField(db_column='RectTop', blank=True, null=True)
@@ -259,7 +276,9 @@ class Multimedia(models.Model):
     id = models.AutoField(db_column='MediaID', primary_key=True)
     media_type = models.IntegerField(db_column='MediaType', blank=True, null=True)
     media_path = models.TextField(db_column='MediaPath', blank=True, null=True)
+    # folder the file is located in
     media_file = models.TextField(db_column='MediaFile', blank=True, null=True)
+    # filename
     url = models.TextField(db_column='URL', blank=True, null=True)
     thumbnail = models.BinaryField(db_column='Thumbnail', blank=True, null=True)
     caption = models.TextField(db_column='Caption', blank=True, null=True)
@@ -284,8 +303,8 @@ class Name(models.Model):
     name_type = models.IntegerField(db_column='NameType', blank=True, null=True)
     date = models.TextField(db_column='Date', blank=True, null=True)
     sort_date = models.IntegerField(db_column='SortDate', blank=True, null=True)
-    is_primary = models.IntegerField(db_column='IsPrimary', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     proof = models.IntegerField(db_column='Proof', blank=True, null=True)
     edit_date = models.TextField(db_column='EditDate', blank=True, null=True)  # This field type is a guess.
     sentence = models.BinaryField(db_column='Sentence', blank=True, null=True)
@@ -312,7 +331,9 @@ class Name(models.Model):
 class Person(models.Model):
     id = models.AutoField(db_column='PersonID', primary_key=True)
     unique_id = models.TextField(db_column='UniqueID', blank=True, null=True)
+    # hexadecimal number, I think used to track people between files' exports
     sex = models.IntegerField(db_column='Sex', blank=True, null=True)
+    # 0 -- Male; 1 -- Female
     edit_date = models.TextField(db_column='EditDate', blank=True, null=True)  # This field type is a guess.
     parent_id = models.IntegerField(db_column='ParentID', blank=True, null=True)
     spouse_id = models.IntegerField(db_column='SpouseID', blank=True, null=True)
@@ -320,8 +341,8 @@ class Person(models.Model):
     relate_1 = models.IntegerField(db_column='Relate1', blank=True, null=True)
     relate_2 = models.IntegerField(db_column='Relate2', blank=True, null=True)
     flags = models.IntegerField(db_column='Flags', blank=True, null=True)
-    is_living = models.IntegerField(db_column='Living', blank=True, null=True)
-    is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
+    is_living = models.BooleanField(db_column='Living', blank=True, null=True)
+    is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     proof = models.IntegerField(db_column='Proof', blank=True, null=True)
     bookmark = models.IntegerField(db_column='Bookmark', blank=True, null=True)
     note = models.BinaryField(db_column='Note', blank=True, null=True)
@@ -344,6 +365,8 @@ class Place(models.Model):
     # used for up to a 5 letter code for a temple
     normalized = models.TextField(db_column='Normalized', blank=True, null=True)
     latitude = models.IntegerField(db_column='Latitude', blank=True, null=True)
+    # 7 decimal places, but the decimal is not included
+    # "-" included for West (and presumably South)
     longitude = models.IntegerField(db_column='Longitude', blank=True, null=True)
     exact_latituate_longitude = models.IntegerField(db_column='LatLongExact', blank=True, null=True)
     master_id = models.IntegerField(db_column='MasterID', blank=True, null=True)
@@ -403,6 +426,7 @@ class Role(models.Model):
     event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
     role_type = models.IntegerField(db_column='RoleType', blank=True, null=True)
     sentence = models.TextField(db_column='Sentence', blank=True, null=True)
+    # useful to create a "story" for the facts
 
     class Meta:
         managed = False
@@ -428,6 +452,7 @@ class Source(models.Model):
 
 
 class SourceTemplate(models.Model):
+    # no such collation sequence: RMNOCASE
     id = models.AutoField(db_column='TemplateID', primary_key=True)
     name = models.TextField(db_column='Name', blank=True, null=True)
     description = models.TextField(db_column='Description', blank=True, null=True)
