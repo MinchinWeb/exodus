@@ -42,31 +42,103 @@ class RootsMagicModelAdmin(MultiDBModelAdmin):
 
 
 class AddressLinkAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "owner_type",
+        "address_id",
+        "owner_id",
+        "address_number",
+        "details",
+    ]
 
 class AddressAdmin(RootsMagicModelAdmin):
     pass
 
 class ChildAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "record_id",
+        "child_id",
+        "family_id",
+        "father_relationship",
+        "mother_relationship",
+        "child_order",
+        "is_private",
+        "father_proof",
+        "mother_proof",
+        "note",
+    ]
 
 class CitationAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "owner_type",
+        "source_id",
+        "owner_id",
+        "quality",
+        "is_private",
+        "comments",
+        "actual_text",
+        "reference_number",
+        "flags",
+        # "fields",
+    ]
 
 class ConfigurationAdmin(RootsMagicModelAdmin):
     pass
 
 class EventAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "event_type",
+        "owner_type",
+        "owner_id",
+        "family_id",
+        "place_id",
+        "site_id",
+        "date",
+        "sort_date",
+        "is_primary",
+        "is_private",
+        "proof",
+        "status",
+        "edit_date",
+        "sentence",
+        # "details",
+        # "note",
+    ]
 
 class ExclusionAdmin(RootsMagicModelAdmin):
     pass
 
 class FactTypeAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "owner_type",
+        "name",
+        "abbreviation",
+        "gedcom_tag",
+        "use_value",
+        "use_date",
+        "use_place",
+        "sentence",
+        "flags",
+    ]
 
 class FamilyAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "father_id",
+        "mother_id",
+        "child_id",
+        "husband_order",
+        "wife_order",
+        "is_private",
+        "proof",
+        "spouse_label",
+        "father_label",
+        "mother_label",
+        # "note",
+    ]
 
 class GroupAdmin(RootsMagicModelAdmin):
     pass
@@ -78,22 +150,112 @@ class LinkAncestryAdmin(RootsMagicModelAdmin):
     pass
 
 class LinkAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "ext_system",
+        "link_type",
+        "rootsmagic_id",
+        "ext_id",
+        "modified",
+        "ext_version",
+        "ext_date",
+        "status",
+        "note",
+    ]
 
 class MediaLinkAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "link_id",
+        "media_id",
+        "owner_type",
+        "owner_id",
+        "is_primary",
+        "include_1",
+        "include_2",
+        "include_3",
+        "include_4",
+        "sort_order",
+        "rectangle_left",
+        "rectangle_top",
+        "rectangle_right",
+        "rectangle_bottom",
+        "note",
+        "caption",
+        "reference_number",
+        "date",
+        "sort_date",
+        # "description",
+    ]
 
 class MultimediaAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "media_type",
+        "media_path",
+        "media_file",
+        "url",
+        "thumbnail",
+        "caption",
+        "reference_number",
+        "date",
+        "sort_date",
+        "description",
+    ]
 
 class NameAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "owner_id",
+        "surname",
+        "given",
+        "prefix",
+        "suffix",
+        "nickname",
+        "name_type",
+        "date",
+        "sort_date",
+        "is_primary",
+        "is_private",
+        "proof",
+        "edit_date",
+        "sentence",
+        # "note",
+        "birth_year",
+        "death_year",
+    ]
 
 class PersonAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "unique_id",
+        "sex",
+        "edit_date",
+        "parent_id",
+        "spouse_id",
+        "color",
+        "relate_1",
+        "relate_2",
+        "flags",
+        "is_living",
+        "is_private",
+        "proof",
+        "bookmark",
+        # "note",
+    ]
 
 class PlaceAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "place_type",
+        "name",
+        "abbreviation",
+        "normalized",
+        "latitude",
+        "longitude",
+        "exact_latituate_longitude",
+        "master_id",
+        "note",
+    ]
 
 class ResearchItemAdmin(RootsMagicModelAdmin):
     pass
@@ -102,7 +264,13 @@ class ResearchAdmin(RootsMagicModelAdmin):
     pass
 
 class RoleAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "role_name",
+        "event_type",
+        "role_type",
+        "sentence",
+    ]
 
 class SourceAdmin(RootsMagicModelAdmin):
     pass
@@ -111,10 +279,30 @@ class SourceTemplateAdmin(RootsMagicModelAdmin):
     pass
 
 class UrlAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "owner_type",
+        "owner_id",
+        "link_type",
+        "name",
+        "url",
+        "note",
+    ]
 
 class WitnessAdmin(RootsMagicModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "event_id",
+        "person_id",
+        "witness_order",
+        "role",
+        "sentence",
+        "note",
+        "given",
+        "surname",
+        "prefix",
+        "suffix",
+    ]
 
 
 

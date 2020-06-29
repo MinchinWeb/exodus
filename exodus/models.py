@@ -13,7 +13,7 @@ class AddressLink(models.Model):
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
     address_id = models.IntegerField(db_column='AddressID', blank=True, null=True)
     owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
-    address_num = models.IntegerField(db_column='AddressNum', blank=True, null=True)
+    address_number = models.IntegerField(db_column='AddressNum', blank=True, null=True)
     details = models.TextField(db_column='Details', blank=True, null=True)
 
     class Meta:
@@ -48,7 +48,7 @@ class Address(models.Model):
 
 
 class Child(models.Model):
-    rec_id = models.AutoField(db_column='RecID', primary_key=True)
+    record_id = models.AutoField(db_column='RecID', primary_key=True)
     child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
     family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
     father_relationship = models.IntegerField(db_column='RelFather', blank=True, null=True)
@@ -74,7 +74,7 @@ class Citation(models.Model):
     is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
     comments = models.BinaryField(db_column='Comments', blank=True, null=True)
     actual_text = models.BinaryField(db_column='ActualText', blank=True, null=True)
-    ref_number = models.TextField(db_column='RefNumber', blank=True, null=True)
+    reference_number = models.TextField(db_column='RefNumber', blank=True, null=True)
     flags = models.IntegerField(db_column='Flags', blank=True, null=True)
     fields = models.BinaryField(db_column='Fields', blank=True, null=True)
 
@@ -297,6 +297,17 @@ class Name(models.Model):
         managed = False
         db_table = 'NameTable'
 
+    def __str__(self):
+        return_str = " ".join([
+            self.prefix,
+            self.given,
+            f'"{self.nickname}"' if self.nickname else '',
+            self.surname,
+            self.suffix])
+        if self.birth_year or self.death_year:
+            return_str += f" ({self.birth_year if self.birth_year else ''}-{self.death_year if self.death_year else ''})"
+        return return_str
+
 
 class Person(models.Model):
     id = models.AutoField(db_column='PersonID', primary_key=True)
@@ -324,13 +335,19 @@ class Person(models.Model):
 class Place(models.Model):
     id = models.AutoField(db_column='PlaceID', primary_key=True)
     place_type = models.IntegerField(db_column='PlaceType', blank=True, null=True)
+    # Place Types:
+    #   0 -- "regular" place
+    #   1 -- LDS Temple
+    #   2 -- "place details" (tied to a regular place)
     name = models.TextField(db_column='Name', blank=True, null=True)
     abbreviation = models.TextField(db_column='Abbrev', blank=True, null=True)
+    # used for up to a 5 letter code for a temple
     normalized = models.TextField(db_column='Normalized', blank=True, null=True)
     latitude = models.IntegerField(db_column='Latitude', blank=True, null=True)
     longitude = models.IntegerField(db_column='Longitude', blank=True, null=True)
     exact_latituate_longitude = models.IntegerField(db_column='LatLongExact', blank=True, null=True)
     master_id = models.IntegerField(db_column='MasterID', blank=True, null=True)
+    # when set, is the "master" place (place_type 0) for a place_type 2
     note = models.BinaryField(db_column='Note', blank=True, null=True)
 
     class Meta:
@@ -390,6 +407,9 @@ class Role(models.Model):
     class Meta:
         managed = False
         db_table = 'RoleTable'
+
+    def __str__(self):
+        return f"{self.role_name} ({self.event_type})"
 
 
 class Source(models.Model):
