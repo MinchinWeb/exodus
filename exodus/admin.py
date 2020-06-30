@@ -8,37 +8,13 @@ from .models import (AddressLink, Address, Child, Citation,
                      Role, Source, SourceTemplate, Url,
                      Witness)
 
-class MultiDBModelAdmin(admin.ModelAdmin):
-    # file:///home/william/Code/exodus-testsite/django-docs/topics/db/multi-db.html
-
-    # A handy constant for the name of the alternate database.
-    using = 'other'
-
-    def save_model(self, request, obj, form, change):
-        # Tell Django to save objects to the 'other' database.
-        obj.save(using=self.using)
-
-    def delete_model(self, request, obj):
-        # Tell Django to delete objects from the 'other' database
-        obj.delete(using=self.using)
-
-    def get_queryset(self, request):
-        # Tell Django to look for objects on the 'other' database.
-        return super().get_queryset(request).using(self.using)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        # Tell Django to populate ForeignKey widgets using a query
-        # on the 'other' database.
-        return super().formfield_for_foreignkey(db_field, request, using=self.using, **kwargs)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        # Tell Django to populate ManyToMany widgets using a query
-        # on the 'other' database.
-        return super().formfield_for_manytomany(db_field, request, using=self.using, **kwargs)
+from . import EXODUS_DB_NAME
+from .utils.admin import MultiDBModelAdmin
+from .utils.rootsmagic import read_and_pprint_date
 
 
 class RootsMagicModelAdmin(MultiDBModelAdmin):
-    using = 'rm'
+    using = EXODUS_DB_NAME
 
 
 class AddressLinkAdmin(RootsMagicModelAdmin):
@@ -57,8 +33,8 @@ class AddressAdmin(RootsMagicModelAdmin):
 class ChildAdmin(RootsMagicModelAdmin):
     list_display = [
         "record_id",
-        "child_id",
-        "family_id",
+        "child",
+        "family",
         "father_relationship",
         "mother_relationship",
         "child_order",
@@ -66,6 +42,10 @@ class ChildAdmin(RootsMagicModelAdmin):
         "father_proof",
         "mother_proof",
         "note",
+    ]
+    raw_id_fields = [
+        'child',
+        'family',
     ]
 
 class CitationAdmin(RootsMagicModelAdmin):
@@ -91,11 +71,12 @@ class EventAdmin(RootsMagicModelAdmin):
         "id",
         "event_type",
         "owner_type",
-        "owner_id",
-        "family_id",
-        "place_id",
-        "site_id",
-        "date",
+        "owner",
+        "family",
+        "place",
+        "site",
+        # "date",
+        "pretty_date",
         "sort_date",
         "is_primary",
         "is_private",
@@ -106,6 +87,10 @@ class EventAdmin(RootsMagicModelAdmin):
         # "details",
         # "note",
     ]
+
+    def pretty_date(self, obj):
+        return read_and_pprint_date(obj.date)
+    pretty_date.short_description = "Date"
 
 class ExclusionAdmin(RootsMagicModelAdmin):
     pass
@@ -127,9 +112,9 @@ class FactTypeAdmin(RootsMagicModelAdmin):
 class FamilyAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
-        "father_id",
-        "mother_id",
-        "child_id",
+        "father",
+        "mother",
+        "child",
         "husband_order",
         "wife_order",
         "is_private",
@@ -166,9 +151,9 @@ class LinkAdmin(RootsMagicModelAdmin):
 class MediaLinkAdmin(RootsMagicModelAdmin):
     list_display = [
         "link_id",
-        "media_id",
+        "media",
         "owner_type",
-        "owner_id",
+        "owner",
         "is_primary",
         "include_1",
         "include_2",
@@ -197,15 +182,20 @@ class MultimediaAdmin(RootsMagicModelAdmin):
         "thumbnail",
         "caption",
         "reference_number",
-        "date",
+        # "date",
+        "pretty_date",
         "sort_date",
-        "description",
+        # "description",
     ]
+
+    def pretty_date(self, obj):
+        return read_and_pprint_date(obj.date)
+    pretty_date.short_description = "Date"
 
 class NameAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
-        "owner_id",
+        "owner",
         "surname",
         "given",
         "prefix",
@@ -227,11 +217,11 @@ class NameAdmin(RootsMagicModelAdmin):
 class PersonAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
-        "unique_id",
-        "sex",
+        'primary_name',
+        "sex_str",
         "edit_date",
-        "parent_id",
-        "spouse_id",
+        "parent",
+        "spouse",
         "color",
         "relate_1",
         "relate_2",
@@ -239,6 +229,7 @@ class PersonAdmin(RootsMagicModelAdmin):
         "is_living",
         "is_private",
         "proof",
+        "unique_id",
         "bookmark",
         # "note",
     ]
@@ -250,11 +241,18 @@ class PlaceAdmin(RootsMagicModelAdmin):
         "name",
         "abbreviation",
         "normalized",
-        "latitude",
-        "longitude",
+        "master_place",
+        # "latitude",
+        # "longitude",
+        "pretty_latlong",
         "exact_latituate_longitude",
-        "master_id",
         "note",
+    ]
+    raw_id_fields = [
+        "master_place"
+    ]
+    readonly_fields = [
+        "pretty_latlong"
     ]
 
 class ResearchItemAdmin(RootsMagicModelAdmin):
@@ -292,8 +290,8 @@ class UrlAdmin(RootsMagicModelAdmin):
 class WitnessAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
-        "event_id",
-        "person_id",
+        "event",
+        "person",
         "witness_order",
         "role",
         "sentence",

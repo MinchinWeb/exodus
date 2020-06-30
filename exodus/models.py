@@ -7,6 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
+from . import EXODUS_DB_NAME, LAT_LONG_SECOND_DECIMAL_PLACES
+
 
 class AddressLink(models.Model):
     id = models.AutoField(db_column='LinkID', primary_key=True)
@@ -50,8 +52,10 @@ class Address(models.Model):
 
 class Child(models.Model):
     record_id = models.AutoField(db_column='RecID', primary_key=True)
-    child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
-    family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
+    # child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
+    # family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
+    child = models.ForeignKey('Person', on_delete=models.SET(0), related_name="child", db_column='ChildID', blank=True, null=True)
+    family = models.ForeignKey('Family', on_delete=models.SET(0), related_name="child_family", db_column='FamilyID', blank=True, null=True)
     father_relationship = models.IntegerField(db_column='RelFather', blank=True, null=True)
     mother_relationship = models.IntegerField(db_column='RelMother', blank=True, null=True)
     child_order = models.IntegerField(db_column='ChildOrder', blank=True, null=True)
@@ -99,20 +103,18 @@ class Configuration(models.Model):
 
 class Event(models.Model):
     id = models.AutoField(db_column='EventID', primary_key=True)
-    event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
+    # event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
+    event_type = models.ForeignKey('FactType', on_delete=models.PROTECT, db_column='EventType', blank=True, null=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
-    owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
-    family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
-    place_id = models.IntegerField(db_column='PlaceID', blank=True, null=True)
-    site_id = models.IntegerField(db_column='SiteID', blank=True, null=True)
+    # owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
+    # place_id = models.IntegerField(db_column='PlaceID', blank=True, null=True)
+    # site_id = models.IntegerField(db_column='SiteID', blank=True, null=True)
+    owner = models.ForeignKey('Person', on_delete=models.CASCADE, db_column='OwnerID', blank=True, null=True)
+    family = models.ForeignKey('Family', on_delete=models.CASCADE, db_column='FamilyID', blank=True, null=True)
+    place = models.ForeignKey('Place', on_delete=models.PROTECT, related_name='event_place', db_column='PlaceID', blank=True, null=True)
+    site = models.ForeignKey('Place', on_delete=models.PROTECT, related_name='event_site', db_column='SiteID', blank=True, null=True)
     date = models.TextField(db_column='Date', blank=True, null=True)
-    # "." for unset
-    # "D[R.]+YYYYMMDD.[CA.]00000000.."
-    #     "R" is for a range, where the second set of digits is the end of the range,
-    #         and set to "00000000" otherwise
-    #     where the "+" likely means AD ("-" for BC dates?)
-    #     MM and DD can be set to "00" for incomplete dates, with "A" for years
-    #         and "C" for months (but "A" and "C" is not used for date ranges)
     sort_date = models.IntegerField(db_column='SortDate', blank=True, null=True)
     is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
     is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
@@ -161,12 +163,18 @@ class FactType(models.Model):
         db_table = 'FactTypeTable'
         verbose_name = "Fact Type"
 
+    def __str__(self):
+        return self.name
+
 
 class Family(models.Model):
     id = models.AutoField(db_column='FamilyID', primary_key=True)
-    father_id = models.IntegerField(db_column='FatherID', blank=True, null=True)
-    mother_id = models.IntegerField(db_column='MotherID', blank=True, null=True)
-    child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
+    # father_id = models.IntegerField(db_column='FatherID', blank=True, null=True)
+    # mother_id = models.IntegerField(db_column='MotherID', blank=True, null=True)
+    # child_id = models.IntegerField(db_column='ChildID', blank=True, null=True)
+    father = models.ForeignKey('Person', on_delete=models.SET(0), related_name="family_father", db_column='FatherID', blank=True, null=True)
+    mother = models.ForeignKey('Person', on_delete=models.SET(0), related_name="family_mother", db_column='MotherID', blank=True, null=True)
+    child = models.ForeignKey('Person', on_delete=models.SET(0), related_name="family_child", db_column='ChildID', blank=True, null=True)
     husband_order = models.IntegerField(db_column='HusbOrder', blank=True, null=True)
     wife_order = models.IntegerField(db_column='WifeOrder', blank=True, null=True)
     is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
@@ -180,6 +188,9 @@ class Family(models.Model):
         managed = False
         db_table = 'FamilyTable'
         verbose_name_plural = "Families"
+
+    def __str__(self):
+        return f"MRIN {self.id}"
 
 
 class Group(models.Model):
@@ -246,10 +257,13 @@ class Link(models.Model):
 
 class MediaLink(models.Model):
     link_id = models.AutoField(db_column='LinkID', primary_key=True)
-    media_id = models.IntegerField(db_column='MediaID', blank=True, null=True)
+    # media_id = models.IntegerField(db_column='MediaID', blank=True, null=True)
+    media = models.ForeignKey('Multimedia', on_delete=models.CASCADE, db_column='MediaID', blank=True, null=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
-    owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    owner = models.ForeignKey('Person', on_delete=models.SET(0), db_column='OwnerID', blank=True, null=True)
     is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
+    # i.e. use this as "the" image for the owner?
     include_1 = models.BooleanField(db_column='Include1', blank=True, null=True)
     include_2 = models.BooleanField(db_column='Include2', blank=True, null=True)
     include_3 = models.BooleanField(db_column='Include3', blank=True, null=True)
@@ -275,6 +289,8 @@ class MediaLink(models.Model):
 class Multimedia(models.Model):
     id = models.AutoField(db_column='MediaID', primary_key=True)
     media_type = models.IntegerField(db_column='MediaType', blank=True, null=True)
+    # 1 -- JPG (and other images?)
+    # 2 -- PDF (and other non-images?)
     media_path = models.TextField(db_column='MediaPath', blank=True, null=True)
     # folder the file is located in
     media_file = models.TextField(db_column='MediaFile', blank=True, null=True)
@@ -291,10 +307,14 @@ class Multimedia(models.Model):
         managed = False
         db_table = 'MultimediaTable'
 
+    def __str__(self):
+        return self.media_file
+
 
 class Name(models.Model):
     id = models.AutoField(db_column='NameID', primary_key=True)
-    owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    owner = models.ForeignKey("Person", on_delete=models.CASCADE, db_column='OwnerID', blank=True, null=True)
     surname = models.TextField(db_column='Surname', blank=True, null=True)
     given = models.TextField(db_column='Given', blank=True, null=True)
     prefix = models.TextField(db_column='Prefix', blank=True, null=True)
@@ -330,13 +350,15 @@ class Name(models.Model):
 
 class Person(models.Model):
     id = models.AutoField(db_column='PersonID', primary_key=True)
-    unique_id = models.TextField(db_column='UniqueID', blank=True, null=True)
+    unique_id = models.CharField(db_column='UniqueID', max_length=36, blank=True, null=True)
     # hexadecimal number, I think used to track people between files' exports
     sex = models.IntegerField(db_column='Sex', blank=True, null=True)
     # 0 -- Male; 1 -- Female
     edit_date = models.TextField(db_column='EditDate', blank=True, null=True)  # This field type is a guess.
-    parent_id = models.IntegerField(db_column='ParentID', blank=True, null=True)
-    spouse_id = models.IntegerField(db_column='SpouseID', blank=True, null=True)
+    # parent_id = models.IntegerField(db_column='ParentID', blank=True, null=True)
+    # spouse_id = models.IntegerField(db_column='SpouseID', blank=True, null=True)
+    parent = models.ForeignKey('Family', on_delete=models.SET(0), related_name='parent_family', db_column='ParentID', blank=True, null=True)
+    spouse = models.ForeignKey('Family', on_delete=models.SET(0), related_name='spouse_family', db_column='SpouseID', blank=True, null=True)
     color = models.IntegerField(db_column='Color', blank=True, null=True)
     relate_1 = models.IntegerField(db_column='Relate1', blank=True, null=True)
     relate_2 = models.IntegerField(db_column='Relate2', blank=True, null=True)
@@ -351,6 +373,31 @@ class Person(models.Model):
         managed = False
         db_table = 'PersonTable'
         verbose_name_plural = "People"
+
+    def __str__(self):
+        return f"RIN {self.id}"
+
+    def primary_name(self):
+        names = Name.objects.using(EXODUS_DB_NAME).filter(owner_id = self.id)
+        if names.exists():
+            if names.count() == 1:
+                return names[0]
+            else:
+                names2 = names.filter(is_primary=1)
+                if names2.exists():
+                    return names2[0]
+                else:
+                    return names[0]
+        else:
+            return None
+
+    def sex_str(self):
+        if self.sex == 0:
+            return "M"
+        elif self.sex == 1:
+            return "F"
+        else:
+            raise ValueError(self.sex)
 
 
 class Place(models.Model):
@@ -369,13 +416,52 @@ class Place(models.Model):
     # "-" included for West (and presumably South)
     longitude = models.IntegerField(db_column='Longitude', blank=True, null=True)
     exact_latituate_longitude = models.IntegerField(db_column='LatLongExact', blank=True, null=True)
-    master_id = models.IntegerField(db_column='MasterID', blank=True, null=True)
+    # master_id = models.IntegerField(db_column='MasterID', blank=True, null=True)
+    master_place = models.ForeignKey('Place', on_delete=models.SET(0), db_column='MasterID', blank=True, null=True)
     # when set, is the "master" place (place_type 0) for a place_type 2
     note = models.BinaryField(db_column='Note', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'PlaceTable'
+
+    def __str__(self):
+        return self.name
+
+    def pretty_latlong(self):
+        def _decimal_to_dms_str(latitude):
+            latitude = abs(latitude)
+            degrees = int(latitude)
+            minutes = int((latitude-degrees)*60)
+            if minutes == 60:
+                degrees += 1
+                minutes = 0
+            seconds = round((((latitude-degrees)*60)-minutes)*60, LAT_LONG_SECOND_DECIMAL_PLACES)
+            if seconds == 60:
+                minutes += 1
+                seconds = 0
+            if seconds == int(seconds):
+                seconds = int(seconds)
+
+            # TODO: Use non breaking spaces here
+            lat_str = f"{degrees}°"
+            if minutes or seconds:
+                lat_str += f" {minutes}'"
+            if seconds:
+                lat_str += f' {seconds}"'
+            return lat_str
+
+
+        if self.latitude and self.longitude:
+            lat_str = _decimal_to_dms_str(self.latitude/1e7)
+            lat_str += " N" if self.latitude >= 0 else " S"
+
+            long_str = _decimal_to_dms_str(self.longitude/1e7)
+            long_str += " E" if self.longitude >= 0 else " W"
+
+            return f"{lat_str} {long_str}"
+        else:
+            return None
 
 
 class ResearchItem(models.Model):
@@ -423,7 +509,8 @@ class Research(models.Model):
 class Role(models.Model):
     id = models.AutoField(db_column='RoleID', primary_key=True)
     role_name = models.TextField(db_column='RoleName', blank=True, null=True)
-    event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
+    # event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
+    event_type = models.ForeignKey('FactType', on_delete=models.PROTECT, db_column='EventType', blank=True, null=True)
     role_type = models.IntegerField(db_column='RoleType', blank=True, null=True)
     sentence = models.TextField(db_column='Sentence', blank=True, null=True)
     # useful to create a "story" for the facts
@@ -433,7 +520,7 @@ class Role(models.Model):
         db_table = 'RoleTable'
 
     def __str__(self):
-        return f"{self.role_name} ({self.event_type})"
+        return f"{self.role_name} for {self.event_type}"
 
 
 class Source(models.Model):
@@ -473,6 +560,7 @@ class Url(models.Model):
     id = models.AutoField(db_column='LinkID', primary_key=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
     owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # owner id is not a person?
     link_type = models.IntegerField(db_column='LinkType', blank=True, null=True)
     name = models.TextField(db_column='Name', blank=True, null=True)
     url = models.TextField(db_column='URL', blank=True, null=True)
@@ -485,10 +573,13 @@ class Url(models.Model):
 
 class Witness(models.Model):
     id = models.AutoField(db_column='WitnessID', primary_key=True)
-    event_id = models.IntegerField(db_column='EventID', blank=True, null=True)
-    person_id = models.IntegerField(db_column='PersonID', blank=True, null=True)
+    # event_id = models.IntegerField(db_column='EventID', blank=True, null=True)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, db_column='EventID', blank=True, null=True)
+    # person_id = models.IntegerField(db_column='PersonID', blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, db_column='PersonID', blank=True, null=True)
     witness_order = models.IntegerField(db_column='WitnessOrder', blank=True, null=True)
-    role = models.IntegerField(db_column='Role', blank=True, null=True)
+    # role = models.IntegerField(db_column='Role', blank=True, null=True)
+    role = models.ForeignKey('Role', on_delete=models.PROTECT, db_column='Role', blank=True, null=True)
     sentence = models.TextField(db_column='Sentence', blank=True, null=True)
     note = models.BinaryField(db_column='Note', blank=True, null=True)
     given = models.TextField(db_column='Given', blank=True, null=True)
