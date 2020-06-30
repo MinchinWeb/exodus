@@ -21,7 +21,7 @@ class AddressLinkAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
         "owner_type",
-        "address_id",
+        "address",
         "owner_id",
         "address_number",
         "details",
@@ -271,7 +271,7 @@ class RoleAdmin(RootsMagicModelAdmin):
     ]
 
 class SourceAdmin(RootsMagicModelAdmin):
-    pass
+    raw_id_fields = ['template']
 
 class SourceTemplateAdmin(RootsMagicModelAdmin):
     pass

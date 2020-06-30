@@ -13,8 +13,10 @@ from . import EXODUS_DB_NAME, LAT_LONG_SECOND_DECIMAL_PLACES
 class AddressLink(models.Model):
     id = models.AutoField(db_column='LinkID', primary_key=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
-    address_id = models.IntegerField(db_column='AddressID', blank=True, null=True)
+    # address_id = models.IntegerField(db_column='AddressID', blank=True, null=True)
+    address = models.ForeignKey('Address', on_delete=models.CASCADE, db_column='AddressID', blank=True, null=True)
     owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # owner is what? Person? Source?
     address_number = models.IntegerField(db_column='AddressNum', blank=True, null=True)
     details = models.TextField(db_column='Details', blank=True, null=True)
 
@@ -48,6 +50,10 @@ class Address(models.Model):
         managed = False
         db_table = 'AddressTable'
         verbose_name_plural = "Addresses"
+        # ordering = ("pk", )
+
+    def __str__(self):
+        return self.name
 
 
 class Child(models.Model):
@@ -524,18 +530,23 @@ class Role(models.Model):
 
 
 class Source(models.Model):
+    # no such collation sequence: RMNOCASE
     id = models.AutoField(db_column='SourceID', primary_key=True)
     name = models.TextField(db_column='Name', blank=True, null=True)
     reference_number = models.TextField(db_column='RefNumber', blank=True, null=True)
     actual_text = models.TextField(db_column='ActualText', blank=True, null=True)
     comments = models.TextField(db_column='Comments', blank=True, null=True)
     is_private = models.IntegerField(db_column='IsPrivate', blank=True, null=True)
-    template_id = models.IntegerField(db_column='TemplateID', blank=True, null=True)
+    # template_id = models.IntegerField(db_column='TemplateID', blank=True, null=True)
+    template = models.ForeignKey('SourceTemplate', on_delete=models.PROTECT, db_column='TemplateID', blank=True, null=True)
     fields = models.BinaryField(db_column='Fields', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'SourceTable'
+
+    def __str__(self):
+        return self.name
 
 
 class SourceTemplate(models.Model):
@@ -554,6 +565,9 @@ class SourceTemplate(models.Model):
         managed = False
         db_table = 'SourceTemplateTable'
         verbose_name = "Source Template"
+
+    def __str__(self):
+        return self.name
 
 
 class Url(models.Model):
