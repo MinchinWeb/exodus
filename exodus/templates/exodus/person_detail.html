@@ -36,6 +36,26 @@
         </ul></li>
     {% endfor %}
     </ul>
+    <h3>Images and Documents</h3>
+    <ul>
+    {% for media in person.medialink_set_all %}
+        <li><ul>
+            <li>
+                {{ media.media.media_path }}{{ media.media.media_file }}
+            </li>
+            <li>{{ media.media.date }}</li>
+            <li>{{ media.media.reference_number }}</li>
+            <li>{{ media.media.caption }}</li>
+            <li>{{ media.media.description }}</li>
+        </ul></li>
+    {% endfor %}
+    </ul>
+
+    <h3>Notes</h3>
+    <p>{{ person.note }}</p>
+
+    <h3>Miscellaneous</h3>
+    <ul>
         <li>Last Edited: {{ person.edit_date }}</li>
         <li>Parent: {{ person.parent }}</li>
         <li>Spouse: {{ person.spouse }}</li>
