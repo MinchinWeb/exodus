@@ -246,7 +246,8 @@ class Link(models.Model):
     ext_system = models.IntegerField(db_column='extSystem', blank=True, null=True)
     # 1 -- FamilySearch
     link_type = models.IntegerField(db_column='LinkType', blank=True, null=True)
-    rootsmagic_id = models.IntegerField(db_column='rmID', blank=True, null=True)
+    # rootsmagic_id = models.IntegerField(db_column='rmID', blank=True, null=True)
+    rootsmagic = models.ForeignKey('Person', on_delete=models.CASCADE, db_column='rmID', blank=True, null=True)
     ext_id = models.TextField(db_column='extID', blank=True, null=True)
     # ID in link system
     #    e.g. "L82W-Z87" for FamilySearch
@@ -413,8 +414,15 @@ class Person(models.Model):
     def __str__(self):
         return f"RIN {self.id}"
 
+    def familysearch_id(self):
+        link = Link.objects.using(EXODUS_DB_NAME).get(ext_system=1, rootsmagic=self)
+        return link.ext_id
+
+    def name_set_all(self):
+        return Name.objects.using(EXODUS_DB_NAME).filter(owner = self)
+
     def primary_name(self):
-        names = Name.objects.using(EXODUS_DB_NAME).filter(owner = self)
+        names = self.name_set_all()
         if names.exists():
             if names.count() == 1:
                 return names[0]

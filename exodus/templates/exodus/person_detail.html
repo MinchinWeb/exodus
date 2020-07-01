@@ -3,10 +3,22 @@
 {% block content %}
     <h2>{{ person.primary_name }}</h2>
     <p>{{ person.sex_long }}</p>
+    <!-- Image -->
+    <p>{{ person.primary_image.media.media_path }}{{ person.primary_image.media.media_file }}</p>
+
+    <h3>Names</h3>
+    <ul>
+    {% for name in person.name_set_all %}
+        <li>{{ name }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Identifiers</h3>
     <ul>
         <li>RIN: {{ person.id }}</li>
         <li>Unique ID: {{ person.unique_id }}</li>
-        <li>Gender: {{ person.sex_str }}</li>
+        <li>FamilySearch: {{ person.familysearch_id }}</li>
+    </ul>
         <li>Last Edited: {{ person.edit_date }}</li>
         <li>Parent: {{ person.parent }}</li>
         <li>Spouse: {{ person.spouse }}</li>

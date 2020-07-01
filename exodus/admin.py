@@ -139,7 +139,7 @@ class LinkAdmin(RootsMagicModelAdmin):
         "id",
         "ext_system",
         "link_type",
-        "rootsmagic_id",
+        "rootsmagic",
         "ext_id",
         "modified",
         "ext_version",
