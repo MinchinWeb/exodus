@@ -342,15 +342,21 @@ class Name(models.Model):
         managed = False
         db_table = 'NameTable'
 
-    def __str__(self):
-        return_str = " ".join([
+    def __str__(self, years=True):
+        return_str = " ".join(
+            filter(  # filter(None, ...) drops the falsy elements
+                None,
+                [
             self.prefix,
             self.given,
             f'"{self.nickname}"' if self.nickname else '',
             self.surname,
-            self.suffix])
-        if self.birth_year or self.death_year:
-            return_str += f" ({self.birth_year if self.birth_year else ''}-{self.death_year if self.death_year else ''})"
+                    self.suffix
+                ]
+            )
+        )
+        if years:
+            return_str += f" ({self.years()})"
         return return_str
 
 
