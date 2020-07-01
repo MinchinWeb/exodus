@@ -347,10 +347,10 @@ class Name(models.Model):
             filter(  # filter(None, ...) drops the falsy elements
                 None,
                 [
-            self.prefix,
-            self.given,
-            f'"{self.nickname}"' if self.nickname else '',
-            self.surname,
+                    self.prefix,
+                    self.given,
+                    f'"{self.nickname}"' if self.nickname else '',
+                    self.surname,
                     self.suffix
                 ]
             )
@@ -358,6 +358,30 @@ class Name(models.Model):
         if years:
             return_str += f" ({self.years()})"
         return return_str
+
+    def sort_view_str(self, years=True):
+        return_str = " ".join(
+            filter(
+                None,
+                [
+                    (self.surname + ",") if self.surname else " ,",
+                    self.prefix,
+                    self.given,
+                    f'"{self.nickname}"' if self.nickname else '',
+                    ("," + self.suffix) if self.suffix else '',
+                ]
+            )
+        )
+        if years:
+            return_str += f" ({self.years()})"
+        return return_str
+
+    def years(self):
+        if self.birth_year or self.death_year:
+            return f"{self.birth_year if self.birth_year else ' '}-{self.death_year if self.death_year else ' '}"
+        else:
+            return ""
+
 
 
 class Person(models.Model):
@@ -390,7 +414,7 @@ class Person(models.Model):
         return f"RIN {self.id}"
 
     def primary_name(self):
-        names = Name.objects.using(EXODUS_DB_NAME).filter(owner_id = self.id)
+        names = Name.objects.using(EXODUS_DB_NAME).filter(owner = self)
         if names.exists():
             if names.count() == 1:
                 return names[0]
@@ -400,6 +424,27 @@ class Person(models.Model):
                     return names2[0]
                 else:
                     return names[0]
+        else:
+            return None
+
+    def primary_name_sortable(self):
+        name = self.primary_name()
+        if name is not None:
+            return name.sort_view_str()
+        else:
+            return name
+
+    def primary_image(self):
+        images = MediaLink.objects.using(EXODUS_DB_NAME).filter(owner = self)
+        if images.exists():
+            if images.count() == 1:
+                return images[0]
+            else:
+                images2 = images.filter(is_primary=1)
+                if images2.exists():
+                    return images2[0]
+                else:
+                    return images[0]
         else:
             return None
 
