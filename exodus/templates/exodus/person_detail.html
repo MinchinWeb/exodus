@@ -18,6 +18,23 @@
         <li>RIN: {{ person.id }}</li>
         <li>Unique ID: {{ person.unique_id }}</li>
         <li>FamilySearch: {{ person.familysearch_id }}</li>
+        <!-- TODO: Ancestry ID -->
+    </ul>
+
+    <h3>Events</h3>
+    <ul>
+    {% for event in person.event_set_all %}
+        <li><ul>
+            <!-- <li>{{ event.id }}</li> -->
+            <li>{{ event.event_type }}</li>
+            <li>{{ event.date }}</li>
+            <li>{{ event.site_and_place }}</li>
+            <li>{{ event.details }}</li>
+            <li>Primary: {{ event.is_primary }}</li>
+            <li>Proof: {{ event.proof }}</li>
+            <li>{{ event.note }}</li>
+        </ul></li>
+    {% endfor %}
     </ul>
         <li>Last Edited: {{ person.edit_date }}</li>
         <li>Parent: {{ person.parent }}</li>

@@ -70,8 +70,9 @@ class EventAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
         "event_type",
-        "owner_type",
         "owner",
+        "owner_type",
+        "owner_id",
         "family",
         "place",
         "site",
@@ -152,8 +153,9 @@ class MediaLinkAdmin(RootsMagicModelAdmin):
     list_display = [
         "link_id",
         "media",
-        "owner_type",
         "owner",
+        "owner_type",
+        "owner_id",
         "is_primary",
         "include_1",
         "include_2",

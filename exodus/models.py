@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 from . import EXODUS_DB_NAME, LAT_LONG_SECOND_DECIMAL_PLACES
 
@@ -112,11 +113,13 @@ class Event(models.Model):
     # event_type = models.IntegerField(db_column='EventType', blank=True, null=True)
     event_type = models.ForeignKey('FactType', on_delete=models.PROTECT, db_column='EventType', blank=True, null=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
-    # owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # 0 -- owned by a Person (individual)
+    # 1 -- owned by a Family
+    owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)  # can be either Person or Family
+    # owner = models.ForeignKey('Person', on_delete=models.CASCADE, db_column='OwnerID', blank=True, null=True)
     # family_id = models.IntegerField(db_column='FamilyID', blank=True, null=True)
     # place_id = models.IntegerField(db_column='PlaceID', blank=True, null=True)
     # site_id = models.IntegerField(db_column='SiteID', blank=True, null=True)
-    owner = models.ForeignKey('Person', on_delete=models.CASCADE, db_column='OwnerID', blank=True, null=True)
     family = models.ForeignKey('Family', on_delete=models.CASCADE, db_column='FamilyID', blank=True, null=True)
     place = models.ForeignKey('Place', on_delete=models.PROTECT, related_name='event_place', db_column='PlaceID', blank=True, null=True)
     site = models.ForeignKey('Place', on_delete=models.PROTECT, related_name='event_site', db_column='SiteID', blank=True, null=True)
@@ -134,6 +137,34 @@ class Event(models.Model):
     class Meta:
         managed = False
         db_table = 'EventTable'
+
+    def owner(self):
+        if self.owner_type == 0:
+            return Person.objects.using(EXODUS_DB_NAME).get(id=self.owner_id)
+        elif self.owner_type == 1:
+            return Family.objects.using(EXODUS_DB_NAME).get(id=self.owner_id)
+        else:
+            raise ValueError(f'Unknown "owner_type: {self.owner_type}')
+
+    def site_and_place(self):
+        return_str = ""
+        try:
+            return_str += self.site.name
+        except ObjectDoesNotExist:
+            pass
+        try:
+            if self.site and self.place:
+                return_str += ", "
+        except ObjectDoesNotExist:
+            pass
+        try:
+            return_str += self.place.name
+        except ObjectDoesNotExist:
+            pass
+        
+        return return_str
+
+
 
 
 class Exclusion(models.Model):
@@ -267,8 +298,13 @@ class MediaLink(models.Model):
     # media_id = models.IntegerField(db_column='MediaID', blank=True, null=True)
     media = models.ForeignKey('Multimedia', on_delete=models.CASCADE, db_column='MediaID', blank=True, null=True)
     owner_type = models.IntegerField(db_column='OwnerType', blank=True, null=True)
-    # owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
-    owner = models.ForeignKey('Person', on_delete=models.SET(0), db_column='OwnerID', blank=True, null=True)
+    # 0 -- Person?
+    # 1 -- Family?
+    # 2 -- Events? Sources?
+    # 3 --
+    # 4 -- 
+    owner_id = models.IntegerField(db_column='OwnerID', blank=True, null=True)
+    # owner is the combination of "owner_type" and "owner"
     is_primary = models.BooleanField(db_column='IsPrimary', blank=True, null=True)
     # i.e. use this as "the" image for the owner?
     include_1 = models.BooleanField(db_column='Include1', blank=True, null=True)
@@ -291,6 +327,17 @@ class MediaLink(models.Model):
         managed = False
         db_table = 'MediaLinkTable'
         verbose_name = "Media Link"
+
+    def owner(self):
+        if self.owner_type == 0:
+            return Person.objects.using(EXODUS_DB_NAME).get(id=self.owner_id)
+        elif self.owner_type == 1:
+            return Family.objects.using(EXODUS_DB_NAME).get(id=self.owner_id)
+        elif self.owner_type in [2, 3, 4]:
+            return "Undef"
+        else:
+            raise ValueError(f'Unknown "owner_type: {self.owner_type}')
+
 
 
 class Multimedia(models.Model):
@@ -414,9 +461,15 @@ class Person(models.Model):
     def __str__(self):
         return f"RIN {self.id}"
 
+    def event_set_all(self):
+        return Event.objects.using(EXODUS_DB_NAME).filter(owner_type=0, owner_id = self.id)
+
     def familysearch_id(self):
         link = Link.objects.using(EXODUS_DB_NAME).get(ext_system=1, rootsmagic=self)
         return link.ext_id
+
+    def medialink_set_all(self):
+        return MediaLink.objects.using(EXODUS_DB_NAME).filter(owner_type=0, owner_id = self.id)
 
     def name_set_all(self):
         return Name.objects.using(EXODUS_DB_NAME).filter(owner = self)
@@ -443,7 +496,7 @@ class Person(models.Model):
             return name
 
     def primary_image(self):
-        images = MediaLink.objects.using(EXODUS_DB_NAME).filter(owner = self)
+        images = self.medialink_set_all()
         if images.exists():
             if images.count() == 1:
                 return images[0]
