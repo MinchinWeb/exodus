@@ -1,0 +1,23 @@
+{% extends "exodus/base.html" %}
+
+{% block content %}
+    <h2>{{ person.primary_name }}</h2>
+    <ul>
+        <li>RIN: {{ person.id }}</li>
+        <li>Unique ID: {{ person.unique_id }}</li>
+        <li>Gender: {{ person.sex_str }}</li>
+        <li>Last Edited: {{ person.edit_date }}</li>
+        <li>Parent: {{ person.parent }}</li>
+        <li>Spouse: {{ person.spouse }}</li>
+        <li>Color: {{ person.color }}</li>
+        <li>Related 1: {{ person.relate_1 }}</li>
+        <li>Related 2: {{ person.relate_2 }}</li>
+        <li>Flags: {{ person.flags }}</li>
+        <li>Living: {{ person.is_living }}</li>
+        <li>Private: {{ person.is_private }}</li>
+        <li>Proof: {{ person.proof }}</li>
+        <li>Bookmark: {{ person.bookmark }}</li>
+    </ul>
+    <h3> Notes: </h3>
+    <p>{{ person.note }}</p>
+{% endblock %}
