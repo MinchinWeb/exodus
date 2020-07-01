@@ -403,13 +403,22 @@ class Person(models.Model):
         else:
             return None
 
-    def sex_str(self):
+    def sex_short(self):
         if self.sex == 0:
             return "M"
         elif self.sex == 1:
             return "F"
         else:
             raise ValueError(self.sex)
+
+    def sex_long(self):
+        if self.sex == 0:
+            return "Male"
+        elif self.sex == 1:
+            return "Female"
+        else:
+            raise ValueError(self.sex)
+
 
 
 class Place(models.Model):

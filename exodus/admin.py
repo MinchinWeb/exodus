@@ -218,7 +218,7 @@ class PersonAdmin(RootsMagicModelAdmin):
     list_display = [
         "id",
         'primary_name',
-        "sex_str",
+        "sex_short",
         "edit_date",
         "parent",
         "spouse",
