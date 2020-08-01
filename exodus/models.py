@@ -5,8 +5,9 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.db.models import Q
 
 from . import EXODUS_DB_NAME, LAT_LONG_SECOND_DECIMAL_PLACES
 
@@ -66,6 +67,7 @@ class Child(models.Model):
     father_relationship = models.IntegerField(db_column='RelFather', blank=True, null=True)
     mother_relationship = models.IntegerField(db_column='RelMother', blank=True, null=True)
     child_order = models.IntegerField(db_column='ChildOrder', blank=True, null=True)
+    # zero-indexed
     is_private = models.BooleanField(db_column='IsPrivate', blank=True, null=True)
     father_proof = models.IntegerField(db_column='ProofFather', blank=True, null=True)
     mother_proof = models.IntegerField(db_column='ProofMother', blank=True, null=True)
@@ -75,6 +77,7 @@ class Child(models.Model):
         managed = False
         db_table = 'ChildTable'
         verbose_name_plural = "Children"
+        ordering = ('family', 'child_order')
 
 
 class Citation(models.Model):
@@ -407,6 +410,9 @@ class Name(models.Model):
             return_str += f" ({self.years()})"
         return return_str
 
+    def no_years(self):
+        return self.__str__(year=False)
+
     def sort_view_str(self, years=True):
         return_str = " ".join(
             filter(
@@ -463,6 +469,9 @@ class Person(models.Model):
 
     def event_set_all(self):
         return Event.objects.using(EXODUS_DB_NAME).filter(owner_type=0, owner_id = self.id)
+
+    def families_as_parent(self):
+        return Family.objects.using(EXODUS_DB_NAME).filter(Q(father=self) | Q(mother=self))
 
     def familysearch_id(self):
         link = Link.objects.using(EXODUS_DB_NAME).get(ext_system=1, rootsmagic=self)

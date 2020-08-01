@@ -9,7 +9,19 @@
     <h3>Names</h3>
     <ul>
     {% for name in person.name_set_all %}
-        <li>{{ name }}</li>
+        <li><ul>
+            <li>{{ name.prefix }}</li>
+            <li>{{ name.given }}</li>
+            <li>{{ name.nickname }}</li>
+            <li>{{ name.surname | upper }}</li>
+            <li>{{ name.suffix }}</li>
+            <li>{{ name.name_type }}</li>
+            <li>{{ name.date }}</li>
+            <li>{{ name.proof }}</li>
+            <li>{{ name.is_primary }}</li>
+            <li>{{ name.is_private }}</li>
+            <li>{{ name.note }}</li>
+        </ul></li>
     {% endfor %}
     </ul>
 
@@ -36,6 +48,24 @@
         </ul></li>
     {% endfor %}
     </ul>
+
+    <h3>Spouse and Children</h3>
+    <ul>
+    {% for family in person.families_as_parent %}
+        <li><ul>
+            <li>Father: {{ family.father.name.no_years }}</li>
+            <li>Mother: {{ family.father.name.no_years }}</li>
+
+        </ul></li>
+        <li>Spouse: {{ person.spouse }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Parents and Siblings</h3>
+    <ul>
+        <li>Parent: {{ person.parent }}</li>
+    </ul>
+
     <h3>Images and Documents</h3>
     <ul>
     {% for media in person.medialink_set_all %}
@@ -43,7 +73,7 @@
             <li>
                 {{ media.media.media_path }}{{ media.media.media_file }}
             </li>
-            <li>{{ media.media.date }}</li>
+            <li>{{ media.media.date }}</li> <!-- TODO: Add filter to display dates nicely -->
             <li>{{ media.media.reference_number }}</li>
             <li>{{ media.media.caption }}</li>
             <li>{{ media.media.description }}</li>
@@ -57,8 +87,6 @@
     <h3>Miscellaneous</h3>
     <ul>
         <li>Last Edited: {{ person.edit_date }}</li>
-        <li>Parent: {{ person.parent }}</li>
-        <li>Spouse: {{ person.spouse }}</li>
         <li>Color: {{ person.color }}</li>
         <li>Related 1: {{ person.relate_1 }}</li>
         <li>Related 2: {{ person.relate_2 }}</li>
@@ -68,6 +96,7 @@
         <li>Proof: {{ person.proof }}</li>
         <li>Bookmark: {{ person.bookmark }}</li>
     </ul>
-    <h3> Notes: </h3>
-    <p>{{ person.note }}</p>
+
+    <h3>Footnotes</h3>
+
 {% endblock %}
